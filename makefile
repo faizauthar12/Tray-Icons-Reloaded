@@ -1,6 +1,22 @@
 UUID = trayIconsReloaded@selfmade.pl
 FILES = metadata.json extension.js TrayIndicator.js AppManager.js prefs.js stylesheet.css
 
+ifeq ($(strip $(DESTDIR)),)
+	INSTALLBASE = $(HOME)/.local/share/gnome-shell/extensions
+else
+	INSTALLBASE = $(DESTDIR)/usr/share/gnome-shell/extensions
+endif
+
+install: install-local
+
+install-local: _build
+	rm -rf $(INSTALLBASE)/$(UUID)
+	mkdir -p $(INSTALLBASE)/$(UUID)
+	cp -r ./_build/* $(INSTALLBASE)/$(UUID)/
+	-rm -fR _build
+	echo done
+
+
 _build:
 	-rm -fR ./_build
 	mkdir -p _build
